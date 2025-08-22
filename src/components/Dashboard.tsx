@@ -2,7 +2,7 @@ import { SocialPost } from "@/types";
 import React from "react";
 import KpiCard from "./KpiCard";
 import PerformanceChart from "./PerformanceChart";
-import EngagementMetrics from "./EngagementMetrics"; // 1. Import the new component
+import EngagementMetrics from "./EngagementMetrics";
 import {
   BarChart,
   Heart,
@@ -10,13 +10,16 @@ import {
   Repeat,
   Bookmark,
   Users,
+  RotateCcw,
 } from "lucide-react";
 
+// 1. Update the props interface to accept the onReset function
 interface DashboardProps {
   data: SocialPost[];
+  onReset: () => void;
 }
 
-export default function Dashboard({ data }: DashboardProps) {
+export default function Dashboard({ data, onReset }: DashboardProps) {
   // --- CALCULATIONS ---
   const totalPosts = data.length;
   const totalReach = data.reduce(
@@ -42,47 +45,54 @@ export default function Dashboard({ data }: DashboardProps) {
 
   return (
     <div className="w-full max-w-6xl space-y-8">
-      <div>
-        <h2 className="text-2xl font-bold mb-6 text-white">
-          Performance Overview
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <KpiCard
-            title="Total Posts"
-            metric={totalPosts.toLocaleString()}
-            icon={<BarChart className="w-5 h-5" />}
-          />
-          <KpiCard
-            title="Total Reach"
-            metric={totalReach.toLocaleString()}
-            icon={<Users className="w-5 h-5" />}
-          />
-          <KpiCard
-            title="Total Likes"
-            metric={totalLikes.toLocaleString()}
-            icon={<Heart className="w-5 h-5" />}
-          />
-          <KpiCard
-            title="Total Comments"
-            metric={totalComments.toLocaleString()}
-            icon={<MessageSquare className="w-5 h-5" />}
-          />
-          <KpiCard
-            title="Total Shares"
-            metric={totalShares.toLocaleString()}
-            icon={<Repeat className="w-5 h-5" />}
-          />
-          <KpiCard
-            title="Total Saves"
-            metric={totalSaves.toLocaleString()}
-            icon={<Bookmark className="w-5 h-5" />}
-          />
-        </div>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-white">Performance Overview</h2>
+        {/* 2. Add the reset button */}
+        <button
+          onClick={onReset}
+          className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-sm text-gray-200 rounded-md hover:bg-gray-600 transition-colors"
+        >
+          <RotateCcw className="w-4 h-4" />
+          <span>Analyze New File</span>
+        </button>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {/* KPI Cards remain the same */}
+        <KpiCard
+          title="Total Posts"
+          metric={totalPosts.toLocaleString()}
+          icon={<BarChart className="w-5 h-5" />}
+        />
+        <KpiCard
+          title="Total Reach"
+          metric={totalReach.toLocaleString()}
+          icon={<Users className="w-5 h-5" />}
+        />
+        <KpiCard
+          title="Total Likes"
+          metric={totalLikes.toLocaleString()}
+          icon={<Heart className="w-5 h-5" />}
+        />
+        <KpiCard
+          title="Total Comments"
+          metric={totalComments.toLocaleString()}
+          icon={<MessageSquare className="w-5 h-5" />}
+        />
+        <KpiCard
+          title="Total Shares"
+          metric={totalShares.toLocaleString()}
+          icon={<Repeat className="w-5 h-5" />}
+        />
+        <KpiCard
+          title="Total Saves"
+          metric={totalSaves.toLocaleString()}
+          icon={<Bookmark className="w-5 h-5" />}
+        />
       </div>
 
       <PerformanceChart data={data} />
 
-      {/* 2. Render the EngagementMetrics component here */}
       <div>
         <h2 className="text-2xl font-bold mb-6 text-white">
           Content Quality Metrics
