@@ -3,6 +3,7 @@ import React from "react";
 import KpiCard from "./KpiCard";
 import PerformanceChart from "./PerformanceChart";
 import EngagementMetrics from "./EngagementMetrics";
+// 1. Change 'Pointer' back to 'RotateCcw' in the import list
 import {
   BarChart,
   Heart,
@@ -13,7 +14,6 @@ import {
   RotateCcw,
 } from "lucide-react";
 
-// 1. Update the props interface to accept the onReset function
 interface DashboardProps {
   data: SocialPost[];
   onReset: () => void;
@@ -47,18 +47,17 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
     <div className="w-full max-w-6xl space-y-8">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-white">Performance Overview</h2>
-        {/* 2. Add the reset button */}
         <button
           onClick={onReset}
-          className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-sm text-gray-200 rounded-md hover:bg-gray-600 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-sm text-gray-200 rounded-md hover:bg-gray-600 transition-colors cursor-pointer"
         >
+          {/* 2. Swap the icon component back to RotateCcw */}
           <RotateCcw className="w-4 h-4" />
           <span>Analyze New File</span>
         </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {/* KPI Cards remain the same */}
         <KpiCard
           title="Total Posts"
           metric={totalPosts.toLocaleString()}
