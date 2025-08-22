@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
+import Link from "next/link"; // 1. Import the Link component
 
 export default function Header() {
   return (
-    // The header now spans the full width with a subtle bottom border
     <header className="w-full border-b border-gray-700/60">
       <div className="max-w-6xl mx-auto p-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          {/* A new, custom SVG logo */}
+        {/* 2. Wrap the logo and title in the Link component */}
+        <Link href="/" className="flex items-center space-x-3">
           <svg
             width="28"
             height="28"
@@ -41,11 +41,8 @@ export default function Header() {
             />
           </svg>
 
-          {/* The new project name */}
           <h1 className="text-xl font-semibold text-gray-50">TrueInsight</h1>
-        </div>
-
-        {/* We can add other links or buttons here later if we want */}
+        </Link>
       </div>
     </header>
   );
