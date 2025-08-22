@@ -1,7 +1,8 @@
 import { SocialPost } from "@/types";
 import React from "react";
 import KpiCard from "./KpiCard";
-import PerformanceChart from "./PerformanceChart"; // 1. Import the new chart component
+import PerformanceChart from "./PerformanceChart";
+import EngagementMetrics from "./EngagementMetrics"; // 1. Import the new component
 import {
   BarChart,
   Heart,
@@ -40,47 +41,53 @@ export default function Dashboard({ data }: DashboardProps) {
   );
 
   return (
-    <div className="w-full max-w-6xl">
-      <h2 className="text-2xl font-bold mb-6 text-white">
-        Performance Overview
-      </h2>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        <KpiCard
-          title="Total Posts"
-          metric={totalPosts.toLocaleString()}
-          icon={<BarChart className="w-5 h-5" />}
-        />
-        <KpiCard
-          title="Total Reach"
-          metric={totalReach.toLocaleString()}
-          icon={<Users className="w-5 h-5" />}
-        />
-        <KpiCard
-          title="Total Likes"
-          metric={totalLikes.toLocaleString()}
-          icon={<Heart className="w-5 h-5" />}
-        />
-        <KpiCard
-          title="Total Comments"
-          metric={totalComments.toLocaleString()}
-          icon={<MessageSquare className="w-5 h-5" />}
-        />
-        <KpiCard
-          title="Total Shares"
-          metric={totalShares.toLocaleString()}
-          icon={<Repeat className="w-5 h-5" />}
-        />
-        <KpiCard
-          title="Total Saves"
-          metric={totalSaves.toLocaleString()}
-          icon={<Bookmark className="w-5 h-5" />}
-        />
+    <div className="w-full max-w-6xl space-y-8">
+      <div>
+        <h2 className="text-2xl font-bold mb-6 text-white">
+          Performance Overview
+        </h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <KpiCard
+            title="Total Posts"
+            metric={totalPosts.toLocaleString()}
+            icon={<BarChart className="w-5 h-5" />}
+          />
+          <KpiCard
+            title="Total Reach"
+            metric={totalReach.toLocaleString()}
+            icon={<Users className="w-5 h-5" />}
+          />
+          <KpiCard
+            title="Total Likes"
+            metric={totalLikes.toLocaleString()}
+            icon={<Heart className="w-5 h-5" />}
+          />
+          <KpiCard
+            title="Total Comments"
+            metric={totalComments.toLocaleString()}
+            icon={<MessageSquare className="w-5 h-5" />}
+          />
+          <KpiCard
+            title="Total Shares"
+            metric={totalShares.toLocaleString()}
+            icon={<Repeat className="w-5 h-5" />}
+          />
+          <KpiCard
+            title="Total Saves"
+            metric={totalSaves.toLocaleString()}
+            icon={<Bookmark className="w-5 h-5" />}
+          />
+        </div>
       </div>
 
-      {/* 2. Render the chart component here */}
-      <div className="mt-8">
-        <PerformanceChart data={data} />
+      <PerformanceChart data={data} />
+
+      {/* 2. Render the EngagementMetrics component here */}
+      <div>
+        <h2 className="text-2xl font-bold mb-6 text-white">
+          Content Quality Metrics
+        </h2>
+        <EngagementMetrics data={data} />
       </div>
     </div>
   );
