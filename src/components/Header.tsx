@@ -1,23 +1,51 @@
-// The "use client" directive is necessary for components that use React Hooks for interactivity.
-// In our case, we'll eventually add interactive elements, so it's good practice to include it now.
 "use client";
 
 import React from "react";
 
-// This is a functional component in React.
-// It's a JavaScript function that returns JSX (HTML-like syntax).
 export default function Header() {
   return (
-    <header className="w-full max-w-5xl mx-auto p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          {/* We'll replace this with a real logo later */}
-          <div className="w-8 h-8 bg-blue-500 rounded-md"></div>
-          <h1 className="text-xl font-bold text-gray-50">TrueInsight</h1>
+    // The header now spans the full width with a subtle bottom border
+    <header className="w-full border-b border-gray-700/60">
+      <div className="max-w-6xl mx-auto p-4 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          {/* A new, custom SVG logo */}
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 2L2 7L12 12L22 7L12 2Z"
+              stroke="#3b82f6"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M2 17L12 22L22 17"
+              stroke="#3b82f6"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeOpacity="0.6"
+            />
+            <path
+              d="M2 12L12 17L22 12"
+              stroke="#3b82f6"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeOpacity="0.3"
+            />
+          </svg>
+
+          {/* The new project name */}
+          <h1 className="text-xl font-semibold text-gray-50">TrueInsight</h1>
         </div>
-        <p className="text-sm text-gray-400">
-          Social Content Performance Analyzer
-        </p>
+
+        {/* We can add other links or buttons here later if we want */}
       </div>
     </header>
   );

@@ -5,8 +5,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Social Insights Analyzer",
-  description: "Upload and analyze your social media performance.",
+  title: "TrueInsight | Social Analytics",
+  description:
+    "Upload and analyze your social media performance with TrueInsight.",
 };
 
 export default function RootLayout({
