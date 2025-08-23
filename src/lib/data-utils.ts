@@ -1,7 +1,15 @@
 import { SocialPost } from "@/types";
+import { format, isValid } from "date-fns";
 
+// cleanData function remains the same
 export const cleanData = (rawData: any[]): SocialPost[] => {
   const cleaned = rawData.map((item) => {
+    let formattedDate = "";
+    const parsedDate = new Date(item.date);
+    if (isValid(parsedDate)) {
+      formattedDate = format(parsedDate, "yyyy-MM-dd");
+    }
+
     const reach = parseInt(item.reach, 10) || 0;
     const likes = parseInt(item.likes, 10) || 0;
     const comments = parseInt(item.comments, 10) || 0;
@@ -9,7 +17,7 @@ export const cleanData = (rawData: any[]): SocialPost[] => {
     const saves = parseInt(item.saves, 10) || 0;
 
     return {
-      date: item.date,
+      date: formattedDate,
       platform: item.platform,
       reach,
       likes,
@@ -22,17 +30,29 @@ export const cleanData = (rawData: any[]): SocialPost[] => {
   return cleaned.filter((item) => item.date && item.platform);
 };
 
-// This function takes our array of posts and groups them into an object.
-// The result will look like: { Instagram: [post1, post2], Facebook: [post3, post4] }
+// groupDataByPlatform function remains the same
 export const groupDataByPlatform = (data: SocialPost[]) => {
   return data.reduce((acc, post) => {
     const platform = post.platform;
-    // If the accumulator object doesn't have a key for this platform yet, create it with an empty array.
     if (!acc[platform]) {
       acc[platform] = [];
     }
-    // Push the current post into the array for its platform.
     acc[platform].push(post);
     return acc;
-  }, {} as Record<string, SocialPost[]>); // The initial value is an empty object.
+  }, {} as Record<string, SocialPost[]>);
+};
+
+// --- ADD THIS NEW FUNCTION ---
+// This function takes a number and formats it with K (thousands) or M (millions)
+export const formatKpiMetric = (num: number): string => {
+  if (num >= 1000000) {
+    // Divide by 1 million and format to 1 decimal place
+    return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  }
+  if (num >= 1000) {
+    // Divide by 1 thousand and format to 1 decimal place
+    return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  }
+  // For numbers less than 1000, just return them as a string
+  return num.toString();
 };

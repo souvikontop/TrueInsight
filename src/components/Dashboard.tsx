@@ -4,7 +4,8 @@ import KpiCard from "./KpiCard";
 import PerformanceChart from "./PerformanceChart";
 import EngagementMetrics from "./EngagementMetrics";
 import PlatformAnalysis from "./PlatformAnalysis";
-import PlatformDistributionChart from "./PlatformDistributionChart"; // 1. Import the new chart
+import PlatformDistributionChart from "./PlatformDistributionChart";
+import { formatKpiMetric } from "@/lib/data-utils"; // 1. Import the new function
 import {
   BarChart,
   Heart,
@@ -57,47 +58,46 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
         </button>
       </div>
 
+      {/* 2. Apply the new formatting function to each metric */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {/* KPI Cards */}
         <KpiCard
           title="Total Posts"
-          metric={totalPosts.toLocaleString()}
+          metric={formatKpiMetric(totalPosts)}
           icon={<BarChart className="w-5 h-5" />}
         />
         <KpiCard
           title="Total Reach"
-          metric={totalReach.toLocaleString()}
+          metric={formatKpiMetric(totalReach)}
           icon={<Users className="w-5 h-5" />}
         />
         <KpiCard
           title="Total Likes"
-          metric={totalLikes.toLocaleString()}
+          metric={formatKpiMetric(totalLikes)}
           icon={<Heart className="w-5 h-5" />}
         />
         {totalComments > 0 && (
           <KpiCard
             title="Total Comments"
-            metric={totalComments.toLocaleString()}
+            metric={formatKpiMetric(totalComments)}
             icon={<MessageSquare className="w-5 h-5" />}
           />
         )}
         {totalShares > 0 && (
           <KpiCard
             title="Total Shares"
-            metric={totalShares.toLocaleString()}
+            metric={formatKpiMetric(totalShares)}
             icon={<Repeat className="w-5 h-5" />}
           />
         )}
         {totalSaves > 0 && (
           <KpiCard
             title="Total Saves"
-            metric={totalSaves.toLocaleString()}
+            metric={formatKpiMetric(totalSaves)}
             icon={<Bookmark className="w-5 h-5" />}
           />
         )}
       </div>
 
-      {/* 2. Create a responsive grid for the charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <PerformanceChart data={data} />
         <PlatformDistributionChart data={data} />

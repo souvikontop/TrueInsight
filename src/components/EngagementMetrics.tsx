@@ -1,7 +1,8 @@
 import { SocialPost } from "@/types";
 import React from "react";
 import KpiCard from "./KpiCard";
-import { Percent, Star } from "lucide-react";
+// 1. Import new icons
+import { Percent, Star, MessageCircle, Share2 } from "lucide-react";
 
 interface EngagementMetricsProps {
   data: SocialPost[];
@@ -33,25 +34,39 @@ export default function EngagementMetrics({ data }: EngagementMetricsProps) {
   const totalEngagements =
     totalLikes + totalComments + totalShares + totalSaves;
 
-  // Engagement Rate calculation with a check to prevent division by zero
   const engagementRate =
     totalReach > 0 ? (totalEngagements / totalReach) * 100 : 0;
-
-  // Save-to-Like Ratio calculation with a check to prevent division by zero
   const saveToLikeRatio = totalLikes > 0 ? (totalSaves / totalLikes) * 100 : 0;
 
+  // 2. Add the two new ratio calculations
+  const commentToLikeRatio =
+    totalLikes > 0 ? (totalComments / totalLikes) * 100 : 0;
+  const shareToLikeRatio =
+    totalLikes > 0 ? (totalShares / totalLikes) * 100 : 0;
+
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+    // 3. Update the grid to accommodate four items
+    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <KpiCard
         title="Engagement Rate / Reach"
-        // .toFixed(2) formats the number to two decimal places
         metric={`${engagementRate.toFixed(2)}%`}
         icon={<Percent className="w-5 h-5" />}
       />
       <KpiCard
-        title="Save-to-Like Quality Score"
+        title="Save-to-Like Score"
         metric={`${saveToLikeRatio.toFixed(2)}%`}
         icon={<Star className="w-5 h-5" />}
+      />
+      {/* 4. Add the two new KPI cards */}
+      <KpiCard
+        title="Comment-to-Like Ratio"
+        metric={`${commentToLikeRatio.toFixed(2)}%`}
+        icon={<MessageCircle className="w-5 h-5" />}
+      />
+      <KpiCard
+        title="Share-to-Like Ratio"
+        metric={`${shareToLikeRatio.toFixed(2)}%`}
+        icon={<Share2 className="w-5 h-5" />}
       />
     </div>
   );
