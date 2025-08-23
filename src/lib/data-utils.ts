@@ -1,11 +1,7 @@
 import { SocialPost } from "@/types";
 
-// A utility function to process the raw data from Papa Parse
 export const cleanData = (rawData: any[]): SocialPost[] => {
   const cleaned = rawData.map((item) => {
-    // We convert each metric to a number using parseInt.
-    // The `|| 0` is a fallback. If a value is missing or not a number (e.g., ""),
-    // it will default to 0, preventing our charts from breaking.
     const reach = parseInt(item.reach, 10) || 0;
     const likes = parseInt(item.likes, 10) || 0;
     const comments = parseInt(item.comments, 10) || 0;
@@ -23,6 +19,20 @@ export const cleanData = (rawData: any[]): SocialPost[] => {
     };
   });
 
-  // We filter out any rows that might be completely empty or invalid after parsing
   return cleaned.filter((item) => item.date && item.platform);
+};
+
+// This function takes our array of posts and groups them into an object.
+// The result will look like: { Instagram: [post1, post2], Facebook: [post3, post4] }
+export const groupDataByPlatform = (data: SocialPost[]) => {
+  return data.reduce((acc, post) => {
+    const platform = post.platform;
+    // If the accumulator object doesn't have a key for this platform yet, create it with an empty array.
+    if (!acc[platform]) {
+      acc[platform] = [];
+    }
+    // Push the current post into the array for its platform.
+    acc[platform].push(post);
+    return acc;
+  }, {} as Record<string, SocialPost[]>); // The initial value is an empty object.
 };

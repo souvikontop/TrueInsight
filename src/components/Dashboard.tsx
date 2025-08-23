@@ -3,6 +3,7 @@ import React from "react";
 import KpiCard from "./KpiCard";
 import PerformanceChart from "./PerformanceChart";
 import EngagementMetrics from "./EngagementMetrics";
+import PlatformAnalysis from "./PlatformAnalysis"; // 1. Import the new component
 import {
   BarChart,
   Heart,
@@ -54,9 +55,8 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
           <span>Analyze New File</span>
         </button>
       </div>
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {/* These cards will always show */}
+        {/* KPI Cards */}
         <KpiCard
           title="Total Posts"
           metric={totalPosts.toLocaleString()}
@@ -72,8 +72,6 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
           metric={totalLikes.toLocaleString()}
           icon={<Heart className="w-5 h-5" />}
         />
-
-        {/* These cards will only show if they have data */}
         {totalComments > 0 && (
           <KpiCard
             title="Total Comments"
@@ -96,9 +94,8 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
           />
         )}
       </div>
-
       <PerformanceChart data={data} />
-
+      <PlatformAnalysis data={data} /> {/* 2. Render the new component */}
       <div>
         <h2 className="text-2xl font-bold mb-6 text-white">
           Content Quality Metrics
