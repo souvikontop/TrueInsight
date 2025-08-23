@@ -50,7 +50,6 @@ const calculateTotals = (posts: SocialPost[]) => {
 };
 
 export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
-  // 1. Add state to manage sorting configuration
   const [sortConfig, setSortConfig] = useState<{
     key: SortKey;
     direction: SortDirection;
@@ -74,9 +73,8 @@ export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
     };
   });
 
-  // 2. Memoize the sorting logic so it only runs when data or sort config changes
   const sortedResults = useMemo(() => {
-    let sortableItems = [...analysisResults];
+    const sortableItems = [...analysisResults];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -91,7 +89,6 @@ export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
     return sortableItems;
   }, [analysisResults, sortConfig]);
 
-  // 3. Create a function to handle sort requests
   const requestSort = (key: SortKey) => {
     let direction: SortDirection = "descending";
     if (
@@ -113,7 +110,6 @@ export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
         <table className="w-full text-sm text-left text-gray-400">
           <thead className="text-xs text-gray-300 uppercase bg-gray-700">
             <tr>
-              {/* 4. Make headers clickable buttons */}
               <th scope="col" className="px-6 py-3">
                 <button
                   onClick={() => requestSort("platform")}
@@ -157,7 +153,6 @@ export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
             </tr>
           </thead>
           <tbody>
-            {/* 5. Map over the 'sortedResults' instead of 'analysisResults' */}
             {sortedResults.map((result) => (
               <tr
                 key={result.platform}

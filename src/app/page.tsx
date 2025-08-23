@@ -20,7 +20,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 1. New useEffect to load data from localStorage on initial render
   useEffect(() => {
     try {
       const savedData = localStorage.getItem("savedData");
@@ -28,14 +27,13 @@ export default function Home() {
         const parsedData = JSON.parse(savedData);
         if (parsedData && parsedData.length > 0) {
           setData(parsedData);
-          setDisplayData(parsedData);
         }
       }
     } catch (error) {
       console.error("Failed to load or parse data from localStorage", error);
-      localStorage.removeItem("savedData"); // Clear corrupted data
+      localStorage.removeItem("savedData");
     }
-  }, []); // The empty array [] means this effect runs only once
+  }, []);
 
   useEffect(() => {
     if (!dateRange || !dateRange.start || !dateRange.end) {
@@ -48,12 +46,10 @@ export default function Home() {
     setDisplayData(filtered);
   }, [data, dateRange]);
 
-  const handleDataUpload = async (parsedData: any[]) => {
+  const handleDataUpload = (parsedData: Record<string, any>[]) => {
     setIsLoading(true);
     setError(null);
-    setDateRange(null);
 
-    // ... validation logic ...
     if (parsedData.length === 0) {
       setError(
         "Validation failed: The CSV file is empty or contains no data rows."
@@ -61,8 +57,10 @@ export default function Home() {
       setIsLoading(false);
       return;
     }
+
     const firstRow = parsedData[0];
     const hasRequiredHeaders = "date" in firstRow && "platform" in firstRow;
+
     if (!hasRequiredHeaders) {
       setError(
         "Validation failed: The CSV file is missing the required 'date' and/or 'platform' headers."
@@ -73,9 +71,7 @@ export default function Home() {
 
     const cleanedData = cleanData(parsedData);
     setData(cleanedData);
-    setDisplayData(cleanedData);
 
-    // 2. Save the new data to localStorage
     try {
       localStorage.setItem("savedData", JSON.stringify(cleanedData));
     } catch (error) {
@@ -95,12 +91,11 @@ export default function Home() {
     setDisplayData([]);
     setError(null);
     setDateRange(null);
-    // 3. Clear the data from localStorage
     localStorage.removeItem("savedData");
   };
 
   return (
-    <div className="flex flex-col min-h-screen items-center w-full p-4 sm:p-8 md-p-12">
+    <div className="flex flex-col min-h-screen items-center w-full p-4 sm:p-8 md:p-12">
       <Header />
 
       <main className="flex flex-col items-center flex-grow w-full max-w-6xl mt-8 sm:mt-12">
