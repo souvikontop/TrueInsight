@@ -1,13 +1,11 @@
 "use client";
 
 import React from "react";
-// 1. We no longer need to import 'Link'
 
 export default function Header() {
   return (
     <header className="w-full border-b border-gray-700/60">
       <div className="max-w-6xl mx-auto p-4 flex items-center justify-between">
-        {/* 2. Change the <Link> component to a standard <a> tag */}
         <a href="/" className="flex items-center space-x-3">
           <svg
             width="28"
@@ -15,17 +13,16 @@ export default function Header() {
             viewBox="0 0 24 24"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
+            className="stroke-blue-500"
           >
             <path
               d="M12 2L2 7L12 12L22 7L12 2Z"
-              stroke="#3b82f6"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
             <path
               d="M2 17L12 22L22 17"
-              stroke="#3b82f6"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -33,7 +30,6 @@ export default function Header() {
             />
             <path
               d="M2 12L12 17L22 12"
-              stroke="#3b82f6"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"

@@ -53,7 +53,6 @@ export default function CsvUploader({
   });
 
   return (
-    // This is the single parent element
     <div className="w-full max-w-lg text-center">
       <div
         {...getRootProps()}

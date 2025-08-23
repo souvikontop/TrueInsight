@@ -5,7 +5,7 @@ import PerformanceChart from "./PerformanceChart";
 import EngagementMetrics from "./EngagementMetrics";
 import PlatformAnalysis from "./PlatformAnalysis";
 import PlatformDistributionChart from "./PlatformDistributionChart";
-import { formatKpiMetric } from "@/lib/data-utils"; // 1. Import the new function
+import { formatKpiMetric } from "@/lib/data-utils";
 import {
   BarChart,
   Heart,
