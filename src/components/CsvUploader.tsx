@@ -3,27 +3,23 @@
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { FileUp } from "lucide-react";
-import Papa from "papaparse"; // Make sure Papa Parse is imported
+import Papa from "papaparse";
 import { SocialPost } from "@/types";
 
-// This interface defines the props the component expects
 interface CsvUploaderProps {
   onDataUpload: (data: SocialPost[]) => void;
 }
 
-// The component needs to accept the 'onDataUpload' prop
 export default function CsvUploader({ onDataUpload }: CsvUploaderProps) {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (file) {
-        // This is the key part: using Papa Parse
         Papa.parse(file, {
           header: true,
           skipEmptyLines: true,
           complete: (results) => {
             const parsedData = results.data as SocialPost[];
-            // This calls the function from the parent page to send the data up
             onDataUpload(parsedData);
           },
         });
@@ -68,19 +64,28 @@ export default function CsvUploader({ onDataUpload }: CsvUploaderProps) {
           </p>
         </div>
       </div>
-      <div className="mt-6 text-left text-sm text-gray-400">
-        <h4 className="font-semibold text-gray-200 mb-2">
-          Required CSV Format:
-        </h4>
-        <p>Your file must contain the required column headers:</p>
-        <div className="mt-2 p-3 bg-gray-800 rounded-md flex flex-wrap gap-x-4 gap-y-2">
-          <code className="text-blue-300">date</code>
-          <code className="text-blue-300">platform</code>
-          <code className="text-blue-300">reach</code>
-          <code className="text-blue-300">likes</code>
-          <code className="text-blue-300">comments</code>
-          <code className="text-blue-300">shares</code>
-          <code className="text-blue-300">saves</code>
+
+      {/* --- UPDATED INSTRUCTIONAL SECTION --- */}
+      <div className="mt-6 text-left text-sm text-gray-400 space-y-3">
+        <div>
+          <h4 className="font-semibold text-gray-200">Required Headers:</h4>
+          <div className="mt-1 p-3 bg-gray-800 rounded-md flex flex-wrap gap-x-4 gap-y-2">
+            <code className="text-blue-300">date</code>
+            <code className="text-blue-300">platform</code>
+          </div>
+        </div>
+        <div>
+          <h4 className="font-semibold text-gray-200">
+            Metric Headers (include as many as you have):
+          </h4>
+          <p>Missing metric columns will be treated as 0.</p>
+          <div className="mt-1 p-3 bg-gray-800 rounded-md flex flex-wrap gap-x-4 gap-y-2">
+            <code className="text-gray-300">reach</code>
+            <code className="text-gray-300">likes</code>
+            <code className="text-gray-300">comments</code>
+            <code className="text-gray-300">shares</code>
+            <code className="text-gray-300">saves</code>
+          </div>
         </div>
       </div>
     </div>
