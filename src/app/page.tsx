@@ -1,18 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react"; // 1. Import useEffect
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import CsvUploader from "@/components/CsvUploader";
 import Dashboard from "@/components/Dashboard";
 import Alert from "@/components/Alert";
 import Spinner from "@/components/Spinner";
-import DateRangePicker from "@/components/DateRangePicker"; // 2. Import the new component
+import DateRangePicker from "@/components/DateRangePicker";
 import { SocialPost } from "@/types";
 import { cleanData } from "@/lib/data-utils";
 
 export default function Home() {
-  const [data, setData] = useState<SocialPost[]>([]); // This will hold the original, full dataset
-  const [displayData, setDisplayData] = useState<SocialPost[]>([]); // This will hold the data to be displayed
+  const [data, setData] = useState<SocialPost[]>([]);
+  const [displayData, setDisplayData] = useState<SocialPost[]>([]);
   const [dateRange, setDateRange] = useState<{
     start: string;
     end: string;
@@ -20,10 +20,9 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 3. This effect runs whenever the dateRange or original data changes
   useEffect(() => {
     if (!dateRange || !dateRange.start || !dateRange.end) {
-      setDisplayData(data); // If no date range, display all data
+      setDisplayData(data);
       return;
     }
 
@@ -39,7 +38,6 @@ export default function Home() {
     setError(null);
     setDateRange(null);
 
-    // ... validation logic remains the same
     if (parsedData.length === 0) {
       setError(
         "Validation failed: The CSV file is empty or contains no data rows."
@@ -58,8 +56,8 @@ export default function Home() {
     }
 
     const cleanedData = cleanData(parsedData);
-    setData(cleanedData); // Set the original data
-    setDisplayData(cleanedData); // Initially, display all data
+    setData(cleanedData);
+    setDisplayData(cleanedData);
     setIsLoading(false);
   };
 
@@ -75,10 +73,11 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen items-center w-full p-4 sm:p-8 md-p-12">
+    <div className="flex flex-col min-h-screen items-center w-full p-4 sm:p-8 md:p-12">
       <Header />
 
-      <main className="flex flex-col items-center flex-grow w-full max-w-6xl mt-16 sm:mt-24">
+      {/* --- THIS IS THE LINE THAT CHANGED --- */}
+      <main className="flex flex-col items-center flex-grow w-full max-w-6xl mt-8 sm:mt-12">
         {displayData.length === 0 && !isLoading && (
           <div className="text-center">
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
@@ -94,7 +93,6 @@ export default function Home() {
           {error && <Alert message={error} />}
         </div>
 
-        {/* 4. Conditionally render the DateRangePicker */}
         {data.length > 0 && !isLoading && (
           <div className="my-4 w-full flex justify-center">
             <DateRangePicker onDateChange={handleDateChange} />
@@ -107,7 +105,6 @@ export default function Home() {
           ) : data.length === 0 ? (
             <CsvUploader onDataUpload={handleDataUpload} onError={setError} />
           ) : (
-            // 5. Pass the 'displayData' to the Dashboard
             <Dashboard data={displayData} onReset={handleReset} />
           )}
         </div>

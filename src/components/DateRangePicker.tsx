@@ -14,7 +14,6 @@ export default function DateRangePicker({
   const [endDate, setEndDate] = useState("");
 
   const handleApply = () => {
-    // Only call the parent function if both dates are selected
     if (startDate && endDate) {
       onDateChange(startDate, endDate);
     }
@@ -41,7 +40,7 @@ export default function DateRangePicker({
       <button
         onClick={handleApply}
         disabled={!startDate || !endDate}
-        className="px-4 py-2 bg-blue-600 text-sm text-white font-semibold rounded-md hover:bg-blue-500 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+        className="px-4 py-2 bg-blue-600 text-sm text-white font-semibold rounded-md hover:bg-blue-500 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed cursor-pointer"
       >
         Apply
       </button>
