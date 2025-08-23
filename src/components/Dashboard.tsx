@@ -3,7 +3,8 @@ import React from "react";
 import KpiCard from "./KpiCard";
 import PerformanceChart from "./PerformanceChart";
 import EngagementMetrics from "./EngagementMetrics";
-import PlatformAnalysis from "./PlatformAnalysis"; // 1. Import the new component
+import PlatformAnalysis from "./PlatformAnalysis";
+import PlatformDistributionChart from "./PlatformDistributionChart"; // 1. Import the new chart
 import {
   BarChart,
   Heart,
@@ -20,7 +21,7 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ data, onReset }: DashboardProps) {
-  // --- CALCULATIONS ---
+  // Calculations remain the same
   const totalPosts = data.length;
   const totalReach = data.reduce(
     (acc, post) => acc + (post.reach as number),
@@ -55,6 +56,7 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
           <span>Analyze New File</span>
         </button>
       </div>
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* KPI Cards */}
         <KpiCard
@@ -94,8 +96,15 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
           />
         )}
       </div>
-      <PerformanceChart data={data} />
-      <PlatformAnalysis data={data} /> {/* 2. Render the new component */}
+
+      {/* 2. Create a responsive grid for the charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <PerformanceChart data={data} />
+        <PlatformDistributionChart data={data} />
+      </div>
+
+      <PlatformAnalysis data={data} />
+
       <div>
         <h2 className="text-2xl font-bold mb-6 text-white">
           Content Quality Metrics

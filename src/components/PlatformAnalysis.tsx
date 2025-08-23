@@ -1,12 +1,19 @@
 import { SocialPost } from "@/types";
-import React from "react";
+import React, { useState, useMemo } from "react";
+import { ArrowUpDown } from "lucide-react";
 
-// The component will receive the original flat data array as a prop
 interface PlatformAnalysisProps {
   data: SocialPost[];
 }
 
-// A helper function to calculate totals for an array of posts
+type SortKey =
+  | "platform"
+  | "postCount"
+  | "totalReach"
+  | "totalLikes"
+  | "engagementRate";
+type SortDirection = "ascending" | "descending";
+
 const calculateTotals = (posts: SocialPost[]) => {
   const totalLikes = posts.reduce(
     (acc, post) => acc + (post.likes as number),
@@ -43,7 +50,12 @@ const calculateTotals = (posts: SocialPost[]) => {
 };
 
 export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
-  // 1. Group the data by platform
+  // 1. Add state to manage sorting configuration
+  const [sortConfig, setSortConfig] = useState<{
+    key: SortKey;
+    direction: SortDirection;
+  } | null>(null);
+
   const groupedData = data.reduce((acc, post) => {
     const platform = post.platform;
     if (!acc[platform]) {
@@ -53,7 +65,6 @@ export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
     return acc;
   }, {} as Record<string, SocialPost[]>);
 
-  // 2. Calculate the totals for each platform
   const analysisResults = Object.keys(groupedData).map((platform) => {
     const platformPosts = groupedData[platform];
     const totals = calculateTotals(platformPosts);
@@ -62,6 +73,36 @@ export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
       ...totals,
     };
   });
+
+  // 2. Memoize the sorting logic so it only runs when data or sort config changes
+  const sortedResults = useMemo(() => {
+    let sortableItems = [...analysisResults];
+    if (sortConfig !== null) {
+      sortableItems.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === "ascending" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [analysisResults, sortConfig]);
+
+  // 3. Create a function to handle sort requests
+  const requestSort = (key: SortKey) => {
+    let direction: SortDirection = "descending";
+    if (
+      sortConfig &&
+      sortConfig.key === key &&
+      sortConfig.direction === "descending"
+    ) {
+      direction = "ascending";
+    }
+    setSortConfig({ key, direction });
+  };
 
   return (
     <div className="bg-gray-800 p-6 rounded-lg shadow-md w-full">
@@ -72,25 +113,52 @@ export default function PlatformAnalysis({ data }: PlatformAnalysisProps) {
         <table className="w-full text-sm text-left text-gray-400">
           <thead className="text-xs text-gray-300 uppercase bg-gray-700">
             <tr>
+              {/* 4. Make headers clickable buttons */}
               <th scope="col" className="px-6 py-3">
-                Platform
+                <button
+                  onClick={() => requestSort("platform")}
+                  className="flex items-center gap-2"
+                >
+                  Platform <ArrowUpDown size={14} />
+                </button>
               </th>
               <th scope="col" className="px-6 py-3 text-right">
-                Posts
+                <button
+                  onClick={() => requestSort("postCount")}
+                  className="flex items-center gap-2 w-full justify-end"
+                >
+                  Posts <ArrowUpDown size={14} />
+                </button>
               </th>
               <th scope="col" className="px-6 py-3 text-right">
-                Total Reach
+                <button
+                  onClick={() => requestSort("totalReach")}
+                  className="flex items-center gap-2 w-full justify-end"
+                >
+                  Total Reach <ArrowUpDown size={14} />
+                </button>
               </th>
               <th scope="col" className="px-6 py-3 text-right">
-                Total Likes
+                <button
+                  onClick={() => requestSort("totalLikes")}
+                  className="flex items-center gap-2 w-full justify-end"
+                >
+                  Total Likes <ArrowUpDown size={14} />
+                </button>
               </th>
               <th scope="col" className="px-6 py-3 text-right">
-                Eng. Rate
+                <button
+                  onClick={() => requestSort("engagementRate")}
+                  className="flex items-center gap-2 w-full justify-end"
+                >
+                  Eng. Rate <ArrowUpDown size={14} />
+                </button>
               </th>
             </tr>
           </thead>
           <tbody>
-            {analysisResults.map((result) => (
+            {/* 5. Map over the 'sortedResults' instead of 'analysisResults' */}
+            {sortedResults.map((result) => (
               <tr
                 key={result.platform}
                 className="bg-gray-800 border-b border-gray-700 hover:bg-gray-700/50"

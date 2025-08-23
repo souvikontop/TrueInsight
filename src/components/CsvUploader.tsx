@@ -1,35 +1,51 @@
 "use client";
 
 import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
+import { useDropzone, FileRejection } from "react-dropzone";
 import { FileUp } from "lucide-react";
 import Papa from "papaparse";
 import { SocialPost } from "@/types";
 
 interface CsvUploaderProps {
   onDataUpload: (data: SocialPost[]) => void;
+  onError: (message: string) => void;
 }
 
-export default function CsvUploader({ onDataUpload }: CsvUploaderProps) {
+export default function CsvUploader({
+  onDataUpload,
+  onError,
+}: CsvUploaderProps) {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      onError("");
       const file = acceptedFiles[0];
       if (file) {
         Papa.parse(file, {
           header: true,
           skipEmptyLines: true,
           complete: (results) => {
-            const parsedData = results.data as SocialPost[];
-            onDataUpload(parsedData);
+            onDataUpload(results.data as SocialPost[]);
           },
         });
       }
     },
-    [onDataUpload]
+    [onDataUpload, onError]
+  );
+
+  const onDropRejected = useCallback(
+    (fileRejections: FileRejection[]) => {
+      const errorMessage =
+        fileRejections[0]?.errors[0]?.message || "Invalid file type.";
+      onError(
+        `Upload failed: ${errorMessage}. Please upload a valid .csv file.`
+      );
+    },
+    [onError]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
+    onDropRejected,
     accept: {
       "text/csv": [".csv"],
     },
@@ -37,6 +53,7 @@ export default function CsvUploader({ onDataUpload }: CsvUploaderProps) {
   });
 
   return (
+    // This is the single parent element
     <div className="w-full max-w-lg text-center">
       <div
         {...getRootProps()}
@@ -65,7 +82,7 @@ export default function CsvUploader({ onDataUpload }: CsvUploaderProps) {
         </div>
       </div>
 
-      {/* --- UPDATED INSTRUCTIONAL SECTION --- */}
+      {/* This instruction section is now correctly nested inside the main div */}
       <div className="mt-6 text-left text-sm text-gray-400 space-y-3">
         <div>
           <h4 className="font-semibold text-gray-200">Required Headers:</h4>
@@ -88,6 +105,6 @@ export default function CsvUploader({ onDataUpload }: CsvUploaderProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div> // This is the corresponding closing tag for the main parent div
   );
 }
