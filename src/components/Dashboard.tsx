@@ -3,7 +3,6 @@ import React from "react";
 import KpiCard from "./KpiCard";
 import PerformanceChart from "./PerformanceChart";
 import EngagementMetrics from "./EngagementMetrics";
-// 1. Change 'Pointer' back to 'RotateCcw' in the import list
 import {
   BarChart,
   Heart,
@@ -51,13 +50,13 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
           onClick={onReset}
           className="flex items-center space-x-2 px-4 py-2 bg-gray-700 text-sm text-gray-200 rounded-md hover:bg-gray-600 transition-colors cursor-pointer"
         >
-          {/* 2. Swap the icon component back to RotateCcw */}
           <RotateCcw className="w-4 h-4" />
           <span>Analyze New File</span>
         </button>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {/* These cards will always show */}
         <KpiCard
           title="Total Posts"
           metric={totalPosts.toLocaleString()}
@@ -73,21 +72,29 @@ export default function Dashboard({ data, onReset }: DashboardProps) {
           metric={totalLikes.toLocaleString()}
           icon={<Heart className="w-5 h-5" />}
         />
-        <KpiCard
-          title="Total Comments"
-          metric={totalComments.toLocaleString()}
-          icon={<MessageSquare className="w-5 h-5" />}
-        />
-        <KpiCard
-          title="Total Shares"
-          metric={totalShares.toLocaleString()}
-          icon={<Repeat className="w-5 h-5" />}
-        />
-        <KpiCard
-          title="Total Saves"
-          metric={totalSaves.toLocaleString()}
-          icon={<Bookmark className="w-5 h-5" />}
-        />
+
+        {/* These cards will only show if they have data */}
+        {totalComments > 0 && (
+          <KpiCard
+            title="Total Comments"
+            metric={totalComments.toLocaleString()}
+            icon={<MessageSquare className="w-5 h-5" />}
+          />
+        )}
+        {totalShares > 0 && (
+          <KpiCard
+            title="Total Shares"
+            metric={totalShares.toLocaleString()}
+            icon={<Repeat className="w-5 h-5" />}
+          />
+        )}
+        {totalSaves > 0 && (
+          <KpiCard
+            title="Total Saves"
+            metric={totalSaves.toLocaleString()}
+            icon={<Bookmark className="w-5 h-5" />}
+          />
+        )}
       </div>
 
       <PerformanceChart data={data} />
