@@ -20,16 +20,31 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // 1. New useEffect to load data from localStorage on initial render
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem("savedData");
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        if (parsedData && parsedData.length > 0) {
+          setData(parsedData);
+          setDisplayData(parsedData);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load or parse data from localStorage", error);
+      localStorage.removeItem("savedData"); // Clear corrupted data
+    }
+  }, []); // The empty array [] means this effect runs only once
+
   useEffect(() => {
     if (!dateRange || !dateRange.start || !dateRange.end) {
       setDisplayData(data);
       return;
     }
-
-    const filtered = data.filter((post) => {
-      const postDate = post.date;
-      return postDate >= dateRange.start && postDate <= dateRange.end;
-    });
+    const filtered = data.filter(
+      (post) => post.date >= dateRange.start && post.date <= dateRange.end
+    );
     setDisplayData(filtered);
   }, [data, dateRange]);
 
@@ -38,6 +53,7 @@ export default function Home() {
     setError(null);
     setDateRange(null);
 
+    // ... validation logic ...
     if (parsedData.length === 0) {
       setError(
         "Validation failed: The CSV file is empty or contains no data rows."
@@ -58,6 +74,15 @@ export default function Home() {
     const cleanedData = cleanData(parsedData);
     setData(cleanedData);
     setDisplayData(cleanedData);
+
+    // 2. Save the new data to localStorage
+    try {
+      localStorage.setItem("savedData", JSON.stringify(cleanedData));
+    } catch (error) {
+      console.error("Failed to save data to localStorage", error);
+      setError("Could not save data to your browser's storage.");
+    }
+
     setIsLoading(false);
   };
 
@@ -70,13 +95,14 @@ export default function Home() {
     setDisplayData([]);
     setError(null);
     setDateRange(null);
+    // 3. Clear the data from localStorage
+    localStorage.removeItem("savedData");
   };
 
   return (
-    <div className="flex flex-col min-h-screen items-center w-full p-4 sm:p-8 md:p-12">
+    <div className="flex flex-col min-h-screen items-center w-full p-4 sm:p-8 md-p-12">
       <Header />
 
-      {/* --- THIS IS THE LINE THAT CHANGED --- */}
       <main className="flex flex-col items-center flex-grow w-full max-w-6xl mt-8 sm:mt-12">
         {displayData.length === 0 && !isLoading && (
           <div className="text-center">
