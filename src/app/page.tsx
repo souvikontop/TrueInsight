@@ -75,7 +75,7 @@ export default function Home() {
     try {
       localStorage.setItem("savedData", JSON.stringify(cleanedData));
     } catch (error) {
-      console.error("Failed to save data to localStorage.", error);
+      console.error("Failed to save data to localStorage", error);
       setError("Could not save data to your browser's storage.");
     }
 
