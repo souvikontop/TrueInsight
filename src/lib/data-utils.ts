@@ -1,6 +1,7 @@
 import { SocialPost } from "@/types";
 import { format, isValid } from "date-fns";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const cleanData = (rawData: Record<string, any>[]): SocialPost[] => {
   const cleaned = rawData.map((item) => {
     let formattedDate = "";

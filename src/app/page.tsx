@@ -46,6 +46,7 @@ export default function Home() {
     setDisplayData(filtered);
   }, [data, dateRange]);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDataUpload = (parsedData: Record<string, any>[]) => {
     setIsLoading(true);
     setError(null);
