@@ -2,7 +2,7 @@
 
 **TrueInsight** is a client-side web application that transforms raw social media CSV data into a clean, interactive, and insightful analytics dashboard. This tool empowers users to quickly understand their content performance without needing complex software.
 
-[!(./public/dashboard-screenshot.png)](https://true-insight.vercel.app/)
+[!(https://github.com/souvikontop/TrueInsight/blob/main/public/dashboard-screenshot.png?raw=true)](https://true-insight.vercel.app/)
 
 **➡️ Live Demo:** [**https://true-insight.vercel.app/**](https://true-insight.vercel.app/)
 
